@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FORMULA PRIMA World Championship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0c; --bg2:#131418; --panel:#151619; --line:#2a2b30;
+  --text:#f2f2f0; --text-dim:#9a9ba1; --red:#d81e2c; --steel:#8c8f98;
+  --font-d:'Oswald',sans-serif; --font-b:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:20px}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-height:1.55;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:var(--font-d);font-size:13px;letter-spacing:.18em;color:var(--red);font-weight:600}
+h2.sec-title{font-family:var(--font-d);font-size:clamp(28px,4vw,46px);font-weight:600;letter-spacing:.01em;margin-top:6px;text-transform:uppercase}
+section{padding:80px 0;border-top:1px solid var(--line)}
+.grid-bg{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;opacity:.25}
+
+/* HERO */
+.hero{position:relative;min-height:92vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;border-top:none}
+.hero .grid-bg{position:absolute;inset:0}
+.hero-mono{position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-family:var(--font-d);font-size:clamp(220px,32vw,460px);font-weight:700;color:transparent;-webkit-text-stroke:1px #26272c;line-height:1;user-select:none}
+.hero-inner{position:relative;z-index:2}
+.hero .eyebrow{margin-bottom:18px}
+.hero h1{font-family:var(--font-d);font-size:clamp(48px,9vw,120px);line-height:.94;font-weight:700;text-transform:uppercase}
+.hero h1 span{color:var(--red)}
+.hero p.sub{margin-top:22px;color:var(--text-dim);font-size:17px}
+.hero-stats{display:flex;gap:40px;margin-top:56px;flex-wrap:wrap}
+.hero-stats div b{display:block;font-family:var(--font-d);font-size:34px;color:var(--red)}
+.hero-stats div span{font-size:12px;letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase}
+.speedline{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--steel),transparent);opacity:.4}
+
+/* WORLD SETTING */
+.world-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:32px;border:1px solid var(--line)}
+
+/* CHAMPIONSHIP SYSTEM */
+.champ-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:40px;border:1px solid var(--line)}
+.champ-block{background:var(--panel);padding:34px}
+.champ-block .tag{font-family:var(--font-d);font-size:12px;letter-spacing:.14em;color:var(--red);text-transform:uppercase}
+.champ-block h3{font-family:var(--font-d);font-size:26px;margin:10px 0 14px;text-transform:uppercase}
+.champ-block p{color:var(--text-dim);font-size:15px}
+
+/* POINTS TABLE */
+.points-table{margin-top:40px;border:1px solid var(--line)}
+.p-row{display:grid;grid-template-columns:60px 60px 1fr;align-items:center;padding:10px 18px;border-bottom:1px solid var(--line);gap:14px}
+.p-row:last-child{border-bottom:none}
+.p-row .pos{font-family:var(--font-d);font-size:20px;color:var(--red)}
+.p-row .pts{font-family:var(--font-d);font-size:18px}
+.p-row .bar-wrap{background:#1c1d21;height:8px;position:relative}
+.p-row .bar{background:var(--red);height:100%}
+
+/* CALENDAR - desktop timeline */
+.timeline-scroll{overflow-x:auto;padding:60px 0 20px;margin-top:10px}
+.timeline{display:flex;align-items:flex-start;min-width:max-content;padding:0 10px}
+.tl-node{width:210px;flex:0 0 auto;position:relative;padding-top:26px;text-align:left}
+.tl-node .dot{position:absolute;top:0;left:0;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--red)}
+.tl-node .connector{position:absolute;top:6px;left:14px;width:196px;height:2px;background:var(--line)}
+.tl-node:last-child .connector{display:none}
+.tl-node .num{font-family:var(--font-d);font-size:12px;color:var(--text-dim);letter-spacing:.1em}
+.tl-node .rname{font-family:var(--font-d);font-size:19px;text-transform:uppercase;margin:4px 0 6px;line-height:1.15}
+.tl-node .circuit{font-size:12px;color:var(--steel)}
+.tl-node .meta{font-size:12px;color:var(--text-dim);margin-top:4px}
+.summer-break{flex:0 0 auto;width:150px;display:flex;align-items:center;justify-content:center;padding-top:26px}
+.summer-break span{font-family:var(--font-d);font-size:12px;letter-spacing:.16em;color:var(--red);border-top:1px dashed var(--red);border-bottom:1px dashed var(--red);padding:8px 4px;white-space:nowrap}
+.tl-node-v{display:none}
+
+/* TEAMS */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+.team{background:var(--panel);border:1px solid var(--line);border-top:3px solid var(--tc);padding:22px;transition:transform .15s ease,border-color .15s ease}
+.team:hover{transform:translateY(-3px)}
+.team-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.team-name{font-family:var(--font-d);font-size:22px;text-transform:uppercase}
+.team-flag{font-size:20px}
+.team-hq{font-size:12px;color:var(--text-dim);margin-bottom:14px}
+.team-hq b{color:var(--tc)}
+.drivers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.driver{position:relative;border:1px solid var(--line);cursor:pointer;transition:border-color .15s ease,transform .15s ease}
+.driver:hover{border-color:var(--tc);transform:translateY(-2px)}
+.driver .ph{aspect-ratio:3/4;background:linear-gradient(160deg,#1c1d21,#0c0d0f);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.driver .ph::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.05),transparent 60%)}
+.driver .ph .init{font-family:var(--font-d);font-size:34px;color:#3a3b40}
+.driver .num{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.65);color:var(--tc);font-family:var(--font-d);font-size:14px;padding:2px 6px;border:1px solid var(--tc)}
+.driver .dname{font-size:12px;padding:8px 8px 2px;font-weight:600}
+.driver .dnat{font-size:11px;color:var(--text-dim);padding:0 8px 8px}
+.team-detail{font-size:12px;color:var(--text-dim)}
+.team-detail p{margin-bottom:5px}
+.team-detail b{color:var(--text)}
+
+/* GLOSSARY */
+.glossary-intro{margin-top:16px;max-width:780px;color:var(--text-dim);font-size:14px}
+.glossary-note{margin-top:12px;padding:12px 14px;border-left:2px solid var(--red);background:var(--panel);color:var(--text-dim);font-size:12px}
+.glossary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin-top:40px;border:1px solid var(--line)}
+.glossary-card{background:var(--panel);padding:24px}
+.glossary-card .gtag{font-family:var(--font-d);font-size:12px;letter-spacing:.14em;color:var(--red);text-transform:uppercase;margin-bottom:5px}
+.glossary-card h3{font-family:var(--font-d);font-size:23px;text-transform:uppercase;margin-bottom:16px}
+.glossary-list{list-style:none}
+.glossary-item{padding:10px 0;border-top:1px solid var(--line)}
+.glossary-item:first-child{border-top:none}
+.glossary-term{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.glossary-term strong{font-family:var(--font-d);font-size:15px;letter-spacing:.02em}
+.glossary-term span{font-size:12px;color:var(--text-dim)}
+.glossary-def{margin-top:3px;font-size:12px;line-height:1.55;color:var(--text-dim)}
+.glossary-def b{color:var(--text)}
+
+footer{padding:50px 0;border-top:1px solid var(--line);color:var(--text-dim);font-size:12px;text-align:center}
+footer b{color:var(--text);font-family:var(--font-d);letter-spacing:.08em}
+
+/* DRIVER MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(6,6,8,.82);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:1000;padding:24px}
+.modal-overlay.open{display:flex}
+.modal-card{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--mc,var(--red));max-width:760px;width:100%;max-height:90vh;overflow-y:auto;display:grid;grid-template-columns:230px 1fr;position:relative}
+.modal-close{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--text-dim);font-size:24px;cursor:pointer;line-height:1;z-index:2}
+.modal-close:hover{color:var(--text)}
+.modal-photo{background:var(--panel);display:flex;align-items:center;justify-content:center;padding:20px 0 20px 20px}
+.modal-photo-box{width:100%;aspect-ratio:2/3;background:linear-gradient(160deg,#1c1d21,#0c0d0f);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.modal-photo-box::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(255,255,255,.06),transparent 60%)}
+.modal-photo-box img{width:100%;height:100%;object-fit:cover;position:relative;z-index:0}
+.modal-photo-box .init{font-family:var(--font-d);font-size:64px;color:#3a3b40;position:relative;z-index:1}
+.modal-photo-box .num{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.65);color:var(--mc,var(--red));font-family:var(--font-d);font-size:20px;padding:4px 10px;border:1px solid var(--mc,var(--red));z-index:2}
+.modal-body{padding:28px 20px 28px 22px}
+.modal-name{font-family:var(--font-d);font-size:26px;text-transform:uppercase;line-height:1.1}
+.modal-origname{font-size:13px;color:var(--text-dim);margin-top:3px;font-style:italic}
+.modal-team{font-size:12px;letter-spacing:.1em;color:var(--mc,var(--red));text-transform:uppercase;margin-top:8px;font-weight:600}
+.modal-meta{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.modal-meta div{font-size:12px;color:var(--text-dim)}
+.modal-meta div b{display:block;font-family:var(--font-d);font-size:16px;color:var(--text);font-weight:500}
+.modal-sec{margin-top:20px}
+.modal-sec .stag{font-family:var(--font-d);font-size:12px;letter-spacing:.12em;color:var(--red);text-transform:uppercase;margin-bottom:8px}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;background:#1c1d21;border:1px solid var(--line);padding:4px 10px;color:var(--text)}
+.trait-list{list-style:none;font-size:13px;color:var(--text-dim)}
+.trait-list li{padding:6px 0;border-top:1px solid var(--line);padding-left:14px;position:relative}
+.trait-list li:first-child{border-top:none}
+.trait-list li::before{content:"—";position:absolute;left:0;color:var(--mc,var(--red))}
+.lastyear{font-size:13px;color:var(--text);background:#1c1d21;border:1px solid var(--line);padding:8px 12px;display:inline-block}
+.lastyear.rookie{color:var(--mc,var(--red));border-color:var(--mc,var(--red))}
+
+@media(max-width:900px){
+  .world-grid{grid-template-columns:1fr}
+  .champ-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr}
+  .glossary-grid{grid-template-columns:1fr 1fr}
+  .timeline-scroll{display:none}
+  .tl-node-v{display:block}
+  .hero-mono{display:none}
+}
+@media(max-width:520px){
+  .glossary-grid{grid-template-columns:1fr}
+  section{padding:56px 0}
+  .hero{min-height:80vh}
+}
+@media(max-width:600px){
+  .modal-card{grid-template-columns:1fr}
+  .modal-photo{padding:16px 16px 0}
+  .modal-photo-box{max-width:220px}
+}
+.v-timeline{margin-top:40px;position:relative;padding-left:24px;display:none}
+@media(max-width:900px){.v-timeline{display:block}}
+.v-line{position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.v-node{position:relative;padding-bottom:30px}
+.v-node .dot{position:absolute;left:-24px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--red)}
+.v-node .num{font-family:var(--font-d);font-size:11px;color:var(--text-dim);letter-spacing:.1em}
+.v-node .rname{font-family:var(--font-d);font-size:18px;text-transform:uppercase;margin:2px 0 4px}
+.v-node .circuit{font-size:12px;color:var(--steel)}
+.v-node .meta{font-size:12px;color:var(--text-dim);margin-top:2px}
+.v-break{padding:10px 0 26px;color:var(--red);font-family:var(--font-d);font-size:12px;letter-spacing:.16em}
+</style>
+</head>
+<body>
+
+<section id="worldsetting" style="border-top:none;padding-top:64px">
+  <div class="wrap">
+    <div class="eyebrow">WORLD SETTING</div>
+    <h2 class="sec-title">수인의 세계</h2>
+    <p style="margin-top:18px;color:var(--text-dim);font-size:15px">
+      이 이야기의 배경이 되는 세계에서, 인류가 있던 자리는 다양한 동물의 특징을 지닌 <b style="color:var(--text)">'수인'</b>들이 대신하고 있습니다.
+      귀나 꼬리, 눈동자의 형태 등 동물종에 따른 외형 차이는 존재하지만, 이는 개인을 이루는 여러 요소 중 하나일 뿐 그 사람의 사회적 지위나 능력을 규정하지 않습니다.
+      포뮬러 프리마의 24명 드라이버 역시 각자 서로 다른 동물종을 지닌 수인입니다.
+    </p>
+    <div class="world-grid">
+      <div class="champ-block">
+        <div class="tag">Species &amp; Society</div>
+        <h3>차별 없는 사회</h3>
+        <p>동물종에 따른 법적·사회적 차별은 존재하지 않습니다. 어떤 동물종으로 태어나든 교육, 직업, 참정권 등 모든 권리는 동등하게 보장됩니다. 다만 개인 간에는 취향이나 편견에 따른 사적인 호오가 존재할 수 있으며, 이는 어디까지나 개인의 영역일 뿐 사회 제도와는 무관합니다.</p>
+      </div>
+      <div class="champ-block">
+        <div class="tag">Beastfolk &amp; Animals</div>
+        <h3>수인과 동물은 다르다</h3>
+        <p>수인은 야생 동물과 명확히 구분되는 별개의 지적 존재입니다. 특정 동물종의 신체적 특징과 감각 일부를 지니고 태어날 뿐, 그 동물 자체는 아닙니다. 수인 사회에서 동물은 여전히 인간 세계와 마찬가지로 반려동물이거나 자연 속 야생의 존재로 여겨집니다.</p>
+      </div>
+      <div class="champ-block">
+        <div class="tag">Lineage &amp; Genetics</div>
+        <h3>혈통에 따른 동물종</h3>
+        <p>부모의 동물종이 서로 다를 경우, 자녀는 확률적으로 둘 중 한쪽의 동물종을 물려받습니다. 이 때문에 한 가족, 심지어 친형제자매 사이에서도 서로 다른 동물종을 가진 경우가 드물지 않습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<header class="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-mono">FP</div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow">PRIMA MOTORSPORT FEDERATION · EST. 1928</div>
+    <h1>FORMULA<br><span>PRIMA</span></h1>
+    <p class="sub">세계 최고 수준의 드라이버와 엔지니어들이 겨루는 국제 모터스포츠 월드 챔피언십. 매년 3월부터 12월까지, 12개 팀과 24명의 드라이버가 22개 라운드에서 속도와 정밀함을 증명합니다.</p>
+    <div class="hero-stats">
+      <div><b>1928</b><span>창설</span></div>
+      <div><b>12</b><span>참가 팀</span></div>
+      <div><b>24</b><span>드라이버</span></div>
+      <div><b>22</b><span>라운드</span></div>
+    </div>
+  </div>
+  <div class="speedline" style="bottom:14%"></div>
+</header>
+
+<section id="system">
+  <div class="wrap">
+    <div class="eyebrow">01 / CHAMPIONSHIP</div>
+    <h2 class="sec-title">Championship System</h2>
+    <div class="champ-grid">
+      <div class="champ-block">
+        <div class="tag">Drivers'</div>
+        <h3>Drivers' Championship</h3>
+        <p>각 드라이버는 시즌 전 그랑프리에서 획득한 포인트를 합산하여 순위를 겨룹니다. 22개 라운드가 끝난 뒤 가장 많은 포인트를 획득한 드라이버가 챔피언이 됩니다.</p>
+      </div>
+      <div class="champ-block">
+        <div class="tag">Constructors'</div>
+        <h3>Constructors' Championship</h3>
+        <p>한 팀 소속 두 드라이버가 획득한 포인트의 합계가 그 팀의 컨스트럭터스 포인트가 됩니다. 팀의 엔지니어링과 전략이 종합적으로 평가됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="points">
+  <div class="wrap">
+    <div class="eyebrow">02 / POINTS SYSTEM</div>
+    <h2 class="sec-title">Points System</h2>
+    <div class="points-table" id="points-table"></div>
+  </div>
+</section>
+
+<section id="calendar">
+  <div class="wrap">
+    <div class="eyebrow">03 / RACE CALENDAR</div>
+    <h2 class="sec-title">Formula Prima Round Calendar</h2>
+    <div class="timeline-scroll">
+      <div class="timeline" id="timeline"></div>
+    </div>
+    <div class="v-timeline" id="v-timeline"><div class="v-line"></div></div>
+  </div>
+</section>
+
+<section id="teams">
+  <div class="wrap">
+    <div class="eyebrow">04 / TEAMS &amp; DRIVERS</div>
+    <h2 class="sec-title">Teams &amp; Drivers</h2>
+    <div class="team-grid" id="team-grid"></div>
+  </div>
+</section>
+
+<section id="glossary">
+  <div class="wrap">
+    <div class="eyebrow">05 / GLOSSARY</div>
+    <h2 class="sec-title">FP Glossary</h2>
+    <div class="glossary-grid">
+
+      <div class="glossary-card">
+        <div class="gtag">01 · Race Weekend &amp; Sessions</div>
+        <h3>레이스 위켄드 &amp; 세션</h3>
+        <ul class="glossary-list">
+          <li class="glossary-item"><div class="glossary-term"><strong>Formation Lap</strong><span>포메이션 랩</span></div><div class="glossary-def">스타트 직전 그리드의 모든 차량이 출발 순서대로 한 바퀴를 도는 절차.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Free Practice (FP)</strong><span>자유 연습</span></div><div class="glossary-def">차량 세팅, 타이어, 레이스 페이스 등을 점검하는 연습 세션.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Grid</strong><span>그리드</span></div><div class="glossary-def">레이스 시작 시 차량이 출발 순서에 맞춰 정렬되는 위치.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Qualifying</strong><span>퀄리파잉 · 예선</span></div><div class="glossary-def">레이스 출발 순서를 결정하기 위한 기록 경쟁 세션.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Race</strong><span>레이스 · 결승</span></div><div class="glossary-def">포인트가 걸린 본 레이스 세션. 정해진 거리 또는 시간에 따라 순위를 결정한다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Reconnaissance Lap</strong><span>리컨나이선스 랩 · 사전 주행</span></div><div class="glossary-def">차량이 그리드로 이동하기 전 트랙을 확인하며 주행하는 랩.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Sprint</strong><span>스프린트</span></div><div class="glossary-def">일부 라운드에서 별도로 열리는 짧은 거리의 포인트 레이스.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Sprint Qualifying</strong><span>스프린트 퀄리파잉 · 스프린트 예선</span></div><div class="glossary-def">스프린트의 출발 순서를 정하는 세션.</div></li>
+        </ul>
+      </div>
+
+      <div class="glossary-card">
+        <div class="gtag">02 · Track &amp; Racing Action</div>
+        <h3>트랙 &amp; 레이싱 액션</h3>
+        <ul class="glossary-list">
+          <li class="glossary-item"><div class="glossary-term"><strong>Apex</strong><span>에이펙스</span></div><div class="glossary-def">코너에서 차량이 가장 안쪽에 접근하는 기준점.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Dirty Air</strong><span>더티 에어 · 난류</span></div><div class="glossary-def">앞차가 만들어낸 난류로 인해 뒤차의 공력 성능과 코너링 안정성이 떨어지는 현상.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Lift and Coast</strong><span>리프트 앤 코스트</span></div><div class="glossary-def">브레이킹 전에 액셀을 미리 놓고 관성 주행해 에너지·타이어 등을 관리하는 주행 기법.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Lock-up</strong><span>락업 · 휠 잠김</span></div><div class="glossary-def">강한 제동으로 한 개 이상의 바퀴가 회전을 멈추며 미끄러지는 현상.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Overtaking</strong><span>추월</span></div><div class="glossary-def">주행 중 상대 차량을 앞질러 트랙 포지션을 바꾸는 행위.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Racing Line</strong><span>레이싱 라인 · 이상 주행선</span></div><div class="glossary-def">코너에서 진입·에이펙스·탈출을 연결해 속도를 최적화하는 주행 경로.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Slipstream</strong><span>슬립스트림</span></div><div class="glossary-def">앞차 뒤의 공기 저항이 낮아지는 영역을 이용해 직선에서 속도를 높이는 효과.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Track Limits</strong><span>트랙 리미트</span></div><div class="glossary-def">차량이 사용할 수 있는 트랙의 경계를 정하는 규정과 그 경계선.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Understeer / Oversteer</strong><span>언더스티어 / 오버스티어</span></div><div class="glossary-def">차량이 코너에서 예상보다 덜 또는 더 회전하는 조향 특성.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Wheel-to-Wheel</strong><span>휠 투 휠 · 나란히 주행</span></div><div class="glossary-def">두 차량이 서로 나란히 달리며 포지션을 다투는 상황.</div></li>
+        </ul>
+      </div>
+
+      <div class="glossary-card">
+        <div class="gtag">03 · Car &amp; Technology</div>
+        <h3>머신 &amp; 테크놀로지</h3>
+        <ul class="glossary-list">
+          <li class="glossary-item"><div class="glossary-term"><strong>Active Aero</strong><span>액티브 에어로 · 능동형 공력</span></div><div class="glossary-def">전·후륜 윙의 각도를 주행 상황에 맞춰 조절하는 공력 시스템. Corner Mode와 Straight Mode를 사용한다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Boost Mode</strong><span>부스트 모드</span></div><div class="glossary-def">드라이버가 ERS의 에너지를 공격 또는 방어 목적으로 적극 전개하는 에너지 사용 모드.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Downforce</strong><span>다운포스 · 양력</span></div><div class="glossary-def">차량을 노면 쪽으로 눌러 코너링 그립을 높이는 공력 하중.</div></li>
+                    <li class="glossary-item"><div class="glossary-term"><strong>Energy Recovery System (ERS)</strong><span>에너지 회수 시스템</span></div><div class="glossary-def">제동 등에서 에너지를 회수해 배터리에 저장하고 전기 모터에 다시 사용하는 시스템.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>MGU-K</strong><span>운동에너지 회수 모터 제너레이터</span></div><div class="glossary-def">제동 에너지를 전기 에너지로 회수하고 필요할 때 동력을 제공하는 전기 모터·발전기.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Monocoque</strong><span>모노코크</span></div><div class="glossary-def">드라이버 셀을 포함하는 차량의 핵심 탄소섬유 구조체.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Overtake Mode</strong><span>오버테이크 모드</span></div><div class="glossary-def">추월 보조 기능. 검출 지점에서 앞차와 1초 이내일 때 조건을 충족하면 다음 랩에서 추가 전기 성능을 활용할 수 있다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Power Unit (PU)</strong><span>파워 유닛</span></div><div class="glossary-def">내연기관과 전기 시스템을 포함하는 FP의 통합 동력 장치.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Recharge</strong><span>리차지 · 에너지 재충전</span></div><div class="glossary-def">제동, 리프트 오프 등으로 회수한 에너지를 배터리에 다시 축적하는 과정.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Straight Mode</strong><span>스트레이트 모드</span></div><div class="glossary-def">Active Aero에서 직선 구간의 공기 저항을 줄이도록 윙을 여는 저항 저감 모드.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Sustainable Fuel</strong><span>지속가능 연료</span></div><div class="glossary-def">FP 파워 유닛에 사용되는 고도화된 지속가능 연료.</div></li>
+        </ul>
+      </div>
+
+      <div class="glossary-card">
+        <div class="gtag">04 · Pit Stop &amp; Tyre Strategy</div>
+        <h3>피트 스톱 &amp; 타이어 전략</h3>
+        <ul class="glossary-list">
+          <li class="glossary-item"><div class="glossary-term"><strong>Compound</strong><span>컴파운드 · 타이어 화합물</span></div><div class="glossary-def">타이어 고무 배합을 뜻하며, 슬릭 범위는 C1~C5다. 각 그랑프리에는 Hard·Medium·Soft가 지정된다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Degradation</strong><span>디그레이데이션 · 타이어 성능 저하</span></div><div class="glossary-def">사용과 열·마모의 영향으로 타이어 성능이 떨어지는 현상.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Full Wet</strong><span>풀 웻 · 완전 우천 타이어</span></div><div class="glossary-def">물이 많이 고인 노면에서 사용하는 청색 표시의 완전 우천용 타이어.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Intermediate</strong><span>인터미디에이트 · 중간 우천 타이어</span></div><div class="glossary-def">완전 건조와 완전 우천 사이의 젖은 노면에 사용하는 녹색 표시 타이어.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Overcut</strong><span>오버컷</span></div><div class="glossary-def">상대보다 피트인을 늦춰 새 타이어의 이점을 활용해 트랙 포지션을 얻으려는 전략.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Pit Entry</strong><span>피트 엔트리 · 피트 진입</span></div><div class="glossary-def">레이스 트랙에서 피트 레인으로 진입하는 구간.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Pit Exit</strong><span>피트 엑시트 · 피트 탈출</span></div><div class="glossary-def">피트 레인에서 레이스 트랙으로 다시 합류하는 구간.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Pit Lane</strong><span>피트 레인</span></div><div class="glossary-def">팀의 피트 박스가 위치하며 피트 스톱이 이루어지는 제한 속도 구역.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Pit Stop</strong><span>피트 스톱</span></div><div class="glossary-def">차량이 피트 박스에 들어와 타이어 교체 등 필요한 작업을 수행하는 정차.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Undercut</strong><span>언더컷</span></div><div class="glossary-def">상대보다 먼저 피트인해 새 타이어의 빠른 랩을 이용, 트랙 포지션을 앞서는 전략.</div></li>
+        </ul>
+      </div>
+
+      <div class="glossary-card">
+        <div class="gtag">05 · Regulations, Signals &amp; Governance</div>
+        <h3>규정, 신호 &amp; 거버넌스</h3>
+        <ul class="glossary-list">
+          <li class="glossary-item"><div class="glossary-term"><strong>5-Second Penalty</strong><span>5초 페널티</span></div><div class="glossary-def">규정 위반 등에 부과되는 시간 페널티. 적용 방식은 해당 절차와 시점에 따라 달라진다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>10-Second Penalty</strong><span>10초 페널티</span></div><div class="glossary-def">규정 위반 등에 부과되는 10초 시간 페널티.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>DNF (Did Not Finish)</strong><span>완주 실패</span></div><div class="glossary-def">차량이 레이스를 끝까지 완주하지 못한 결과를 뜻한다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Drive-Through Penalty</strong><span>드라이브 스루 페널티</span></div><div class="glossary-def">차량이 피트 레인을 통과하며 페널티를 이행하는 제재.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>False Start</strong><span>플라잉/부정 출발</span></div><div class="glossary-def">스타트 신호 전에 차량이 규정상 허용되지 않는 방식으로 움직이는 경우.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Parc Fermé</strong><span>파르크 페르메 · 차량 봉인 관리</span></div><div class="glossary-def">차량에 허용되는 변경과 점검이 엄격히 제한되는 규정 상태.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Safety Car (SC)</strong><span>세이프티 카</span></div><div class="glossary-def">위험 상황에서 차량을 통제된 속도로 이끌며 레이스를 중립화하는 차량.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Stewards</strong><span>스튜어드 · 경기 심사위원</span></div><div class="glossary-def">사건과 규정 위반을 심사하고 필요할 경우 페널티를 결정하는 경기 심사 기구.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Track Limits</strong><span>트랙 리미트</span></div><div class="glossary-def">차량이 트랙 경계를 벗어나지 않도록 정한 규정. 위반은 세션·상황에 따라 삭제 랩타임이나 페널티로 이어질 수 있다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Virtual Safety Car (VSC)</strong><span>가상 세이프티 카</span></div><div class="glossary-def">실제 세이프티 카 없이 차량의 속도와 간격을 통제하는 중립화 절차.</div></li>
+        </ul>
+      </div>
+
+      <div class="glossary-card">
+        <div class="gtag">06 · Flags</div>
+        <h3>플래그</h3>
+        <ul class="glossary-list">
+          <li class="glossary-item"><div class="glossary-term"><strong>Black Flag</strong><span>블랙 플래그 · 검은색 깃발</span></div><div class="glossary-def">특정 차량의 경기에서의 즉시 퇴장 등 중대한 제재를 알리는 플래그.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Blue Flag</strong><span>블루 플래그 · 청색 깃발</span></div><div class="glossary-def">뒤에서 빠르게 접근하는 차량이 있음을 알리며, 특히 랩드 차량에 양보 의무를 알리는 데 사용된다.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Chequered Flag</strong><span>체커드 플래그 · 체크무늬 깃발</span></div><div class="glossary-def">세션 또는 레이스의 종료를 알리는 흑백 체크무늬 깃발.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Green Flag</strong><span>그린 플래그 · 녹색 깃발</span></div><div class="glossary-def">위험 구간이 해소되어 정상적인 레이싱이 가능함을 알리는 신호.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Red Flag</strong><span>레드 플래그 · 적색 깃발</span></div><div class="glossary-def">중대한 위험이나 기상 등으로 세션 또는 레이스를 중단하는 신호.</div></li>
+          <li class="glossary-item"><div class="glossary-term"><strong>Yellow Flag</strong><span>옐로 플래그 · 황색 깃발</span></div><div class="glossary-def">트랙의 위험 요소를 알리고 해당 구간에서 주의를 요구하는 신호. 상황에 따라 추월이 제한된다.</div></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <b>FORMULA PRIMA</b> WORLD CHAMPIONSHIP<br>Governed by Prima Motorsport Federation (PMF) · Est. 1928
+</footer>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-card" id="modal-card">
+    <button class="modal-close" id="modal-close" aria-label="닫기">&times;</button>
+    <div class="modal-photo" id="modal-photo"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const points=[[1,25],[2,18],[3,15],[4,12],[5,10],[6,8],[7,6],[8,4],[9,2],[10,1]];
+const pt=document.getElementById('points-table');
+const max=25;
+points.forEach(([pos,pts])=>{
+  const row=document.createElement('div');row.className='p-row';
+  row.innerHTML=`<div class="pos">${String(pos).padStart(2,'0')}</div><div class="pts">${pts}P</div><div class="bar-wrap"><div class="bar" style="width:${(pts/max*100)}%"></div></div>`;
+  pt.appendChild(row);
+});
+
+const rounds=[
+["01","호주 라운드","멜버른 렉사이드 서킷","멜버른 · 3월 6–8일"],
+["02","중국 라운드","지아딩 서킷","상하이 · 3월 20–22일"],
+["03","일본 라운드","미에 서킷","스즈카 · 4월 3–5일"],
+["04","캐나다 라운드","세인트로렌스 아일랜드 서킷","몬트리올 · 4월 17–19일"],
+["05","미국(LA) 라운드","LA 퍼시픽 스피드웨이","로스앤젤레스 · 5월 1–3일"],
+["06","모나코 라운드","모나코 하버 스트리트 서킷","모나코 · 5월 15–17일"],
+["07","스페인 라운드","바르셀로나 인터내셔널 서킷","바르셀로나 · 5월 29–31일"],
+["08","이탈리아 라운드","롬바르디아 서킷","밀라노 · 6월 12–14일"],
+["09","오스트리아 라운드","슈필베르크 알펜 서킷","슈필베르크 · 6월 26–28일"],
+["10","독일 라운드","라인-네카어 서킷","만하임 · 7월 3–5일"],
+["11","벨기에 라운드","아르덴 포레스트 서킷","스파 · 7월 10–12일"],
+["12","영국 라운드","노샘프턴셔 서킷","실버스톤 · 7월 24–26일"],
+"BREAK",
+["13","헝가리 라운드","모조로드 레이스 서킷","모조로드 · 8월 21–23일"],
+["14","네덜란드 라운드","노스 시 코스트 서킷","잔드보르트 · 9월 4–6일"],
+["15","핀란드 라운드","패이얘트해메 서킷","라흐티 · 9월 18–20일"],
+["16","대한민국 라운드","인천-서울 서킷","인천 · 10월 2–4일"],
+["17","싱가포르 라운드","싱가포르 마리나 서킷","싱가포르 · 10월 16–18일"],
+["18","인도네시아 라운드","자바 하이랜드 서킷","반둥 · 10월 30일–11월 1일"],
+["19","미국(오스틴) 라운드","론스타 서킷","오스틴 · 11월 6–8일"],
+["20","멕시코 라운드","아즈테카 서킷","멕시코시티 · 11월 20–22일"],
+["21","브라질 라운드","상파울루 그린벨트 서킷","상파울루 · 12월 4–6일"],
+["22","카타르 라운드","도하 데저트 서킷","도하 · 12월 11–13일"]
+];
+
+const tl=document.getElementById('timeline');
+const vtl=document.getElementById('v-timeline');
+rounds.forEach(r=>{
+  if(r==="BREAK"){
+    const sb=document.createElement('div');sb.className='summer-break';sb.innerHTML='<span>SUMMER BREAK</span>';tl.appendChild(sb);
+    const vb=document.createElement('div');vb.className='v-break';vb.textContent='──── SUMMER BREAK ────';vtl.appendChild(vb);
+    return;
+  }
+  const [num,name,circuit,meta]=r;
+  const node=document.createElement('div');node.className='tl-node';
+  node.innerHTML=`<div class="dot"></div><div class="connector"></div><div class="num">ROUND ${num}</div><div class="rname">${name}</div><div class="circuit">${circuit}</div><div class="meta">${meta}</div>`;
+  tl.appendChild(node);
+  const vnode=document.createElement('div');vnode.className='v-node';
+  vnode.innerHTML=`<div class="dot"></div><div class="num">ROUND ${num}</div><div class="rname">${name}</div><div class="circuit">${circuit}</div><div class="meta">${meta}</div>`;
+  vtl.appendChild(vnode);
+});
+
+const teams=[
+{name:"Scuderia Bellarosa<br>(스쿠데리아 벨라로사)",flag:"🇮🇹",country:"이탈리아",hq:"모데나, 이탈리아",color:"#B3122D",motto:"Vincere Sempre",char:"전통과 명예를 중시하는 유서 깊은 명문팀.",phil:"극한의 퍼포먼스와 공격적인 전략.",
+ drivers:[
+   {name:"마테오 벨리니",num:7,nat:"🇮🇹 이탈리아 / 🇦🇷 아르헨티나",orig:"Matteo Bellini",age:29,code:"BEL",lastYear:"종합 2위 · 312pt",height:181,init:"MB",species:"벵골호랑이",birthday:"3월 14일",
+     personality:["열정적인","자신만만한","카리스마 있는","승부욕 강한","의리 있는"],
+     traits:["공격적인 추월 시도로 유명함","타이어 관리보다 순간 페이스를 우선시함","압박 속에서도 흔들리지 않는 멘탈"]},
+   {name:"엘리아스 쾨니히",num:22,nat:"🇩🇪 독일 / 🇦🇹 오스트리아",orig:"Elias König",age:24,code:"KON",lastYear:"종합 6위 · 201pt",height:179,init:"EK",species:"유라시아스라소니",birthday:"7월 2일",
+     personality:["침착한","분석적인","신중한","야심찬","겸손한"],
+     traits:["정교한 코너링과 라인 선택","데이터 기반의 세팅 조율을 선호함","일관되게 안정적인 페이스 유지"]}
+ ]},
+{name:"Kronwerk<br>(크론베르크)",flag:"🇩🇪",country:"독일",hq:"슈투트가르트, 독일",color:"#5A5F68",motto:"Beyond Limits",char:"완벽주의와 기술력을 중시하는 독일계 강팀.",phil:"정밀한 엔지니어링과 안정적인 레이스 운영.",
+ drivers:[
+   {name:"루카스 바이스",num:1,nat:"🇩🇪 독일",orig:"Lukas Weiß",age:31,code:"WEZ",lastYear:"종합 1위 · 338pt (드라이버스 챔피언)",height:184,init:"LW",species:"회색늑대",birthday:"1월 29일",
+     personality:["완벽주의적인","냉철한","절제된","책임감 강한","과묵한"],
+     traits:["시즌 내내 일관된 랩타임을 유지함","최상급 타이어 관리 능력","실수 없는 클린한 레이스 운영"]},
+   {name:"아드리앙 모로",num:14,nat:"🇫🇷 프랑스",orig:"Adrien Moreau",age:26,code:"MOR",lastYear:"종합 9위 · 142pt",height:178,init:"AM",species:"시베리안허스키",birthday:"11월 5일",
+     personality:["세심한","협조적인","전략적인","침착한","친화적인"],
+     traits:["팀 전략을 충실히 따르는 스타일","우천 컨디션에서 강한 모습","안정적인 스타트 포지션 확보"]}
+ ]},
+{name:"Vespera<br>(베스페라)",flag:"🇲🇨",country:"모나코",hq:"몬테카를로, 모나코",color:"#3B5BA8",motto:"Elegance Under Pressure",char:"화려한 이미지와 막대한 자본을 가진 신흥 명문.",phil:"속도와 이미지 모두를 지배한다.",
+ drivers:[
+   {name:"줄리앙 로랑",num:11,nat:"🇫🇷 프랑스 / 🇱🇮 리히텐슈타인",orig:"Julien Laurent",age:27,code:"LAU",lastYear:"종합 4위 · 256pt",height:183,init:"JL",species:"아프리카사자",birthday:"5월 21일",
+     personality:["우아한","자신감 넘치는","사교적인","승부욕 강한","완벽주의적인"],
+     traits:["화려한 추월 감각으로 유명함","프레셔 상황에서도 침착함 유지","퀄리파잉 세션에 특히 강함"]},
+   {name:"니코 하르트만",num:28,nat:"🇨🇭 스위스",orig:"Nico Hartmann",age:22,code:"HAR",lastYear:null,height:177,init:"NH",species:"붉은여우",birthday:"9월 17일",
+     personality:["대담한","패기 넘치는","낙천적인","적응력 좋은","솔직한"],
+     traits:["공격적인 스타트로 순위를 끌어올림","빠른 학습 속도로 성장 중","모험적인 오버테이크 시도"]}
+ ]},
+{name:"Asterion<br>(아스테리온)",flag:"🇬🇧",country:"영국",hq:"옥스퍼드셔, 영국",color:"#7C4DFF",motto:"Always Forward",char:"젊고 공격적인 신세대 팀.",phil:"실패를 감수한 과감한 개발.",
+ drivers:[
+   {name:"올리버 그랜트",num:4,nat:"🇬🇧 영국(북아일랜드)",orig:"Oliver Grant",age:23,code:"GRA",lastYear:"종합 11위 · 98pt",height:185,init:"OG",species:"울버린",birthday:"2월 9일",
+     personality:["저돌적인","열정적인","고집 있는","직설적인","승부욕 강한"],
+     traits:["과감한 인사이드 라인 선점","리스크를 감수한 추월 시도","예측하기 어려운 레이스 운영"]},
+   {name:"라파엘 코스타",num:19,nat:"🇵🇹 포르투갈 / 🇧🇷 브라질",orig:"Rafael Costa",age:25,code:"CST",lastYear:"종합 13위 · 77pt",height:180,init:"RC",species:"붉은여우",birthday:"8월 30일",
+     personality:["유쾌한","유연한","창의적인","사교적인","근성 있는"],
+     traits:["변화무쌍한 날씨 컨디션에 강함","타이어 온도 관리에 능숙함","레이스 후반 추격전에 특기가 있음"]}
+ ]},
+{name:"Meridian<br>(메리디언)",flag:"🇺🇸",country:"미국",hq:"샬럿, 미국",color:"#D97A3D",motto:"Reach the Impossible",char:"거대한 자본과 미국식 기업 문화를 가진 팀.",phil:"데이터와 전략을 통한 효율적인 승리.",
+ drivers:[
+   {name:"잭슨 리드",num:6,nat:"🇺🇸 미국",orig:"Jackson Reed",age:28,code:"RED",lastYear:"종합 7위 · 188pt",height:186,init:"JR",species:"아메리카비버",birthday:"4월 11일",
+     personality:["체계적인","논리적인","침착한","프로페셔널한","신중한"],
+     traits:["데이터 분석에 기반한 주행 스타일","연료 세이브 운영에 능숙함","안정적으로 포인트를 수집함"]},
+   {name:"쇠렌 린드스트림",num:31,nat:"🇸🇪 스웨덴 / 🇫🇮 핀란드 / 🇺🇸 미국",orig:"Sören Lindström",age:21,code:"LIN",lastYear:null,height:190,init:"SL",species:"순록",birthday:"12월 3일",
+     personality:["조용한","성실한","관찰력 있는","겸손한","끈기 있는"],
+     traits:["매 라운드 꾸준한 성장세를 보임","섬세한 브레이킹 포인트 감각","실수를 줄이는 안정형 드라이빙"]}
+ ]},
+{name:"Kōryū<br>(코류)",flag:"🇯🇵",country:"일본",hq:"스즈카, 일본",color:"#D94A38",motto:"Precision in Motion",char:"작지만 강한 기술 중심 팀.",phil:"가벼운 차체와 섬세한 셋업.",
+ drivers:[
+   {name:"타카하시 렌",num:16,nat:"🇯🇵 일본",orig:"高橋 蓮（たかはし れん）",age:25,code:"REN",lastYear:"종합 8위 · 165pt",height:174,init:"TR",species:"두루미",birthday:"6월 25일",
+     personality:["섬세한","정확한","절제된","예의 바른","집중력 있는"],
+     traits:["밀리미터 단위의 정밀한 라인 선택","낮은 실수율의 클린한 주행","기술적인 세팅 이해도가 매우 높음"]},
+   {name:"김진령",num:33,nat:"🇰🇷 대한민국",age:22,code:"KIM",lastYear:"종합 15위 · 54pt",height:176,init:"KJ",species:"담비",birthday:"3월 14일",
+     personality:["도전적인","명랑한","유연한","승부욕 강한","사교적인"],
+     traits:["빠른 반응속도로 접전에 강함","순위 다툼 배틀에서 두각을 나타냄","예선 스퍼트 구간이 특기"]}
+ ]},
+{name:"Han Motors<br>(한 모터스)",flag:"🇰🇷",country:"대한민국",hq:"용인, 대한민국",color:"#D6487C",motto:"Rise Beyond",char:"비교적 젊은 아시아계 팀. 한국 모터스포츠 기술 기반 성장.",phil:"끊임없는 개발과 빠른 적응.",
+ drivers:[
+   {name:"강지훈",num:9,nat:"🇰🇷 대한민국",age:26,code:"KAN",lastYear:"종합 16위 · 48pt",height:178,init:"KJ",species:"진돗개",birthday:"10월 8일",
+     personality:["근성 있는","끈기 있는","겸손한","성실한","목표 지향적인"],
+     traits:["꾸준한 실력 발전 곡선을 보임","홈 그랑프리에서 강한 동기부여","압박 속에서도 흐트러지지 않는 집중력"]},
+   {name:"마르코 실바",num:27,nat:"🇧🇷 브라질",orig:"Marco Silva",age:24,code:"SIL",lastYear:"종합 12위 · 85pt",height:182,init:"MS",species:"재규어",birthday:"5월 21일",
+     personality:["열정적인","즉흥적인","대담한","친화적인","승부욕 강한"],
+     traits:["본능적인 추월 감각이 뛰어남","빗길 주행에서 특히 강함","과감한 피트 타이밍 전략을 즐겨 씀"]}
+ ]},
+{name:"Veltrano<br>(벨트라노)",flag:"🇪🇸",country:"스페인",hq:"바르셀로나, 스페인",color:"#F5C542",motto:"Burn Brighter",char:"감정적이고 공격적인 남유럽계 팀.",phil:"과감한 추월과 높은 코너링 속도.",
+ drivers:[
+   {name:"알레한드로 루이스",num:18,nat:"🇪🇸 스페인",orig:"Alejandro Ruiz",age:30,code:"RUZ",lastYear:"종합 5위 · 214pt",height:179,init:"AR",species:"이베리아스라소니",birthday:"7월 19일",
+     personality:["정열적인","다혈질의","자신감 넘치는","승부욕 강한","솔직한"],
+     traits:["과감한 코너 진입 타이밍","높은 코너링 속도를 유지함","휠투휠 배틀에서 물러서지 않는 스타일"]},
+   {name:"루카 페라로",num:42,nat:"🇮🇹 이탈리아",orig:"Luca Ferraro",age:21,code:"FER",lastYear:null,height:183,init:"LF",species:"참매",birthday:"4월 11일",
+     personality:["활기찬","도전적인","감정적인","성장 지향적인","솔직한"],
+     traits:["공격적인 추월 시도를 자주 감행함","빠른 적응력으로 신인답지 않은 페이스","경기마다 기복이 있는 퍼포먼스"]}
+ ]},
+{name:"Vintera<br>(빈테라)",flag:"🇳🇱",country:"네덜란드",hq:"암스테르담, 네덜란드",color:"#8ED6E8",motto:"Cold Mind, Fast Heart",char:"냉정하고 실용적인 중견팀.",phil:"타이어 관리와 장기적인 레이스 페이스.",
+ drivers:[
+   {name:"단 베르메르",num:12,nat:"🇳🇱 네덜란드 / 🇱🇺 룩셈부르크",orig:"Daan Vermeer",age:27,code:"VER",lastYear:"종합 10위 · 121pt",height:188,init:"DV",species:"회색늑대",birthday:"9월 30일",
+     personality:["냉정한","실용적인","차분한","계산적인","인내심 있는"],
+     traits:["뛰어난 타이어 관리 능력","장거리 레이스 페이스 유지에 강함","리스크를 최소화하는 전략 운영"]},
+   {name:"에릭 노바크",num:45,nat:"🇨🇿 체코",orig:"Erik Novák",age:23,code:"NOV",lastYear:"종합 14위 · 66pt",height:181,init:"EN",species:"미어캣",birthday:"1월 12일",
+     personality:["신중한","꾸준한","분석적인","조용한","협조적인"],
+     traits:["안정적인 레이스 운영을 보여줌","연료·타이어 효율 관리에 능숙함","팀 전략에 순응적인 스타일"]}
+ ]},
+{name:"Ravenhall<br>(레이븐홀)",flag:"🇬🇧",country:"영국",hq:"노샘프턴셔, 영국",color:"#8C8F98",motto:"Earn Your Place",char:"거칠고 경쟁적인 사설 레이싱팀.",phil:"빠른 차보다 강한 드라이버를 만든다.",
+ drivers:[
+   {name:"칼럼 헤이즈",num:3,nat:"🇬🇧 영국(잉글랜드)",orig:"Callum Hayes",age:28,code:"HAY",lastYear:"종합 3위 · 289pt",height:187,init:"CH",species:"벵골호랑이",birthday:"6월 8일",
+     personality:["거친","투지 넘치는","직설적인","강인한","자립적인"],
+     traits:["몸싸움이 강한 휠투휠 배틀 스타일","포지션 사수에 능숙함","압박 속에서도 물러서지 않음"]},
+   {name:"빅터 페트로프",num:55,nat:"🇧🇬 불가리아",orig:"Виктор Петров",age:25,code:"PTR",lastYear:"종합 17위 · 39pt",height:184,init:"VP",species:"불곰",birthday:"11월 22일",
+     personality:["대담한","근성 있는","무뚝뚝한","승부욕 강한","인내심 있는"],
+     traits:["거친 배틀에도 굴하지 않는 스타일","레이스 후반 스퍼트가 특기임","예측하기 어려운 라인 선택"]}
+ ]},
+{name:"Delacroix<br>(들라크루아)",flag:"🇫🇷",country:"프랑스",hq:"르망, 프랑스",color:"#8E4A7E",motto:"Toujours Plus Vite",char:"우아함과 기술을 결합한 전통적인 프랑스 팀.",phil:"균형 잡힌 차량과 정교한 전략.",
+ drivers:[
+   {name:"에티엔 모렐",num:21,nat:"🇫🇷 프랑스",orig:"Étienne Morel",age:32,code:"MRL",lastYear:"종합 18위 · 33pt",height:180,init:"EM",species:"붉은사슴",birthday:"8월 4일",
+     personality:["노련한","우아한","침착한","전략적인","신사적인"],
+     traits:["정교한 레이스 매니지먼트 능력","공격과 수비의 균형 잡힌 드라이빙","위기 상황 대응 능력이 뛰어남"]},
+   {name:"아미르 하다드",num:37,nat:"🇱🇧 레바논",orig:"أمير حداد",age:20,code:"HAD",lastYear:null,height:175,init:"AH",species:"사막여우",birthday:"12월 19일",
+     personality:["순수한","열정적인","성장 지향적인","겸손한","호기심 많은"],
+     traits:["매우 빠른 학습 곡선을 보여줌","저돌적인 시도를 두려워하지 않음","아직 다듬어지는 중인 일관성"]}
+ ]},
+{name:"Northstar<br>(노스스타)",flag:"🇨🇦",country:"캐나다",hq:"몬트리올, 캐나다",color:"#1F6B57",motto:"Silent. Swift. Relentless.",char:"조용하지만 끈질긴 언더독 팀.",phil:"약점을 최소화하고 기회를 놓치지 않는다.",
+ drivers:[
+   {name:"이든 밀러",num:8,nat:"🇨🇦 캐나다 / 🇺🇸 미국",orig:"Eden Miller",age:26,code:"MLR",lastYear:"종합 19위 · 28pt",height:182,init:"EM",species:"캐나다스라소니",birthday:"2월 27일",
+     personality:["과묵한","끈기 있는","침착한","실속 있는","신뢰감 있는"],
+     traits:["기회 포착 능력이 뛰어남","안정적으로 포인트를 획득함","실수가 적은 클린한 레이스 운영"]},
+   {name:"토마스 오르테가",num:77,nat:"🇲🇽 멕시코",orig:"Tomás Ortega",age:22,code:"ORT",lastYear:"종합 20위 · 22pt",height:179,init:"TO",species:"코요테",birthday:"10월 16일",
+     personality:["활기찬","대담한","사교적인","도전적인","낙천적인"],
+     traits:["공격적인 오버테이크를 즐겨 시도함","빠른 타이어 워밍업 능력","홈 관중 앞에서 강한 퍼포먼스를 보임"]}
+ ]}
+];
+
+const tg=document.getElementById('team-grid');
+const driverIndex={};
+teams.forEach(t=>{
+  const el=document.createElement('div');el.className='team';el.style.setProperty('--tc',t.color);
+  const driversHtml=t.drivers.map(d=>{
+    driverIndex[d.num]={...d,team:t.name.replace('<br>',' '),color:t.color};
+    return `
+    <div class="driver" data-num="${d.num}">
+      <div class="ph"><span class="init">${d.init}</span><span class="num">${d.num}</span></div>
+      <div class="dname">${d.name} (${d.age})</div>
+      <div class="dnat">${d.nat}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML=`
+    <div class="team-head"><div class="team-name">${t.name}</div><div class="team-flag">${t.flag}</div></div>
+    <div class="team-hq">본부 <b>${t.hq}</b></div>
+    <div class="drivers">${driversHtml}</div>
+    <div class="team-detail">
+      <p><b>모토</b> — ${t.motto}</p>
+      <p><b>팀 성격</b> — ${t.char}</p>
+      <p><b>레이싱 철학</b> — ${t.phil}</p>
+    </div>`;
+  tg.appendChild(el);
+});
+
+const overlay=document.getElementById('modal-overlay');
+const modalCard=document.getElementById('modal-card');
+const modalPhoto=document.getElementById('modal-photo');
+const modalBody=document.getElementById('modal-body');
+
+function openDriverModal(num){
+  const d=driverIndex[num];
+  if(!d) return;
+  modalCard.style.setProperty('--mc',d.color);
+  const photoInner = d.img
+    ? `<img src="${d.img}" alt="${d.name}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'init',textContent:'${d.init}'}))"><span class="num">${d.num}</span>`
+    : `<span class="init">${d.init}</span><span class="num">${d.num}</span>`;
+  modalPhoto.innerHTML=`<div class="modal-photo-box">${photoInner}</div>`;
+  modalBody.innerHTML=`
+    <div class="modal-name">${d.name}</div>
+    ${d.orig ? `<div class="modal-origname">${d.orig}</div>` : ''}
+<br>
+    <div class="modal-meta">
+      <div>번호<b>#${d.num}</b></div>
+      <div>나이<b>${d.age}세 (${d.birthday}생)</b></div>
+      <div>키<b>${d.height}cm</b></div>
+      <div>동물종<b>${d.species}</b></div>
+      <div>국적<b style="font-size:14px">${d.nat}</b></div>
+      <div>코드<b>${d.code}</b></div>
+    </div>
+    <div class="modal-sec">
+      <div class="stag">Personality</div>
+      <div class="chip-row">${d.personality.map(p=>`<span class="chip">${p}</span>`).join('')}</div>
+    </div>
+    <div class="modal-sec">
+      <div class="stag">Racing Traits</div>
+      <ul class="trait-list">${d.traits.map(t=>`<li>${t}</li>`).join('')}</ul>
+    </div>
+    <div class="modal-sec">
+      <div class="stag">Last Season</div>
+      ${d.lastYear ? `<div class="lastyear">${d.lastYear}</div>` : `<div class="lastyear rookie">루키 · 이번 시즌 데뷔 (작년 기록 없음)</div>`}
+    </div>`;
+  overlay.classList.add('open');
+}
+function closeDriverModal(){ overlay.classList.remove('open'); }
+
+tg.addEventListener('click',e=>{
+  const card=e.target.closest('.driver');
+  if(card) openDriverModal(card.dataset.num);
+});
+document.getElementById('modal-close').addEventListener('click',closeDriverModal);
+overlay.addEventListener('click',e=>{ if(e.target===overlay) closeDriverModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeDriverModal(); });
+</script>
+</body>
+</html>
